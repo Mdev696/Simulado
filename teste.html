@@ -4,213 +4,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulado Universitário Pro - 50 Questões</title>
+    <title>Simulado Enfermagem 500+</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --success: #27ae60;
-            --error: #e74c3c;
-            --bg: #f4f7f6;
+            --primary: #006064;
+            --accent: #00acc1;
+            --success: #2e7d32;
+            --error: #c62828;
+            --bg: #eceff1;
+            --text: #37474f;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg);
-            margin: 0;
-            padding: 15px;
+            color: var(--text);
             display: flex;
             justify-content: center;
+            padding: 20px;
+            margin: 0;
         }
 
         .container {
             background: white;
-            max-width: 850px;
+            max-width: 800px;
             width: 100%;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
-        /* Dashboard */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            background: #ebf2f7;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+        .header {
             text-align: center;
-            border: 1px solid #d6e0e9;
+            border-bottom: 3px solid var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
         }
 
-        .stat-label {
-            font-size: 0.85rem;
-            color: #555;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border-bottom: 4px solid #cfd8dc;
         }
 
         .stat-value {
-            font-size: 1.5rem;
-            font-weight: 800;
+            font-size: 1.4rem;
+            font-weight: bold;
             display: block;
         }
 
-        .text-success {
-            color: var(--success);
-        }
-
-        .text-error {
-            color: var(--error);
-        }
-
-        /* Menu */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-        }
-
-        .btn-materia {
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
+        .btn-main {
+            width: 100%;
+            padding: 20px;
             background: var(--primary);
             color: white;
-            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.3rem;
             font-weight: bold;
-            transition: 0.2s;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .btn-materia:hover {
+        .btn-main:hover {
             background: var(--accent);
-            transform: translateY(-2px);
         }
 
-        /* Quiz Area */
         #quiz-area {
             display: none;
         }
 
-        .progress-container {
-            width: 100%;
-            background: #eee;
-            height: 10px;
-            border-radius: 5px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-
-        #progress-bar {
-            height: 100%;
-            background: var(--accent);
-            width: 0%;
-            transition: 0.4s;
-        }
-
-        .header-quiz {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            font-weight: bold;
-        }
-
-        /* Botão Voltar */
-        .btn-voltar {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--primary);
-            cursor: pointer;
-            padding: 0 10px 0 0;
-            transition: 0.2s;
-        }
-
-        .btn-voltar:hover {
-            color: var(--accent);
-            transform: scale(1.1);
-        }
-
-        #pergunta-texto {
+        .pergunta-texto {
             font-size: 1.2rem;
-            color: var(--primary);
-            margin: 20px 0;
-            line-height: 1.4;
-            font-weight: 600;
-        }
-
-        .opcoes-grid {
-            display: grid;
-            gap: 10px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #263238;
         }
 
         .opcao {
+            width: 100%;
             padding: 15px;
+            margin: 8px 0;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border-radius: 8px;
             background: white;
             text-align: left;
-            cursor: pointer;
             font-size: 1rem;
+            cursor: pointer;
             transition: 0.2s;
         }
 
         .opcao:hover:not(:disabled) {
             border-color: var(--accent);
-            background: #f0f7ff;
+            background: #f0fbfc;
         }
 
         .correta {
-            background: #d4edda !important;
+            background: #c8e6c9 !important;
             border-color: var(--success) !important;
-            color: #155724;
+            color: #1b5e20;
             font-weight: bold;
         }
 
         .errada {
-            background: #f8d7da !important;
+            background: #ffcdd2 !important;
             border-color: var(--error) !important;
-            color: #721c24;
+            color: #b71c1c;
         }
 
-        #area-feedback {
-            margin-top: 25px;
+        #feedback {
+            margin-top: 20px;
             padding: 20px;
-            border-left: 5px solid var(--accent);
-            background: #f1f8ff;
+            border-radius: 8px;
+            background: #fff3e0;
+            border-left: 6px solid #ff9800;
             display: none;
-            border-radius: 0 8px 8px 0;
         }
 
-        .btn-acao {
+        .btn-next {
             width: 100%;
-            margin-top: 15px;
             padding: 15px;
-            background: var(--primary);
+            background: var(--text);
             color: white;
             border: none;
+            margin-top: 15px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 1rem;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-
-            .stat-value {
-                font-size: 1.2rem;
-            }
-
-            #pergunta-texto {
-                font-size: 1.1rem;
-            }
         }
     </style>
 </head>
@@ -219,239 +148,230 @@
 
     <div class="container">
         <div id="home">
-            <h1 style="text-align: center; color: var(--primary);">Simulado Integrado</h1>
+            <div class="header">
+                <h1>Enfermagem Master Quiz</h1>
+                <p>Simulado com questões de concursos reais</p>
+            </div>
 
-            <div class="dashboard">
-                <div>
-                    <span class="stat-label">Desempenho Positivo</span>
-                    <span id="perc-pos" class="stat-value text-success">0%</span>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>Progresso</span>
+                    <span id="stat-progresso" class="stat-value">0/0</span>
                 </div>
-                <div>
-                    <span class="stat-label">Desempenho Negativo</span>
-                    <span id="perc-neg" class="stat-value text-error">0%</span>
+                <div class="stat-card">
+                    <span>Acertos</span>
+                    <span id="stat-acertos" class="stat-value" style="color:var(--success)">0%</span>
+                </div>
+                <div class="stat-card">
+                    <span>Erros</span>
+                    <span id="stat-erros" class="stat-value" style="color:var(--error)">0%</span>
                 </div>
             </div>
 
-            <div class="menu-grid">
-                <button class="btn-materia" onclick="start('micro')">Programação de Microcontroladores</button>
-                <button class="btn-materia" onclick="start('calculo')">Cálculo Diferencial e Integral</button>
-                <button class="btn-materia" onclick="start('embarcados')">Sistemas Embarcados</button>
-                <button class="btn-materia" onclick="start('digital')">Eletrônica Digital</button>
-                <button class="btn-materia" onclick="start('quant')">Métodos Quantitativos</button>
-            </div>
+            <button class="btn-main" onclick="iniciar()">INICIAR SIMULADO</button>
         </div>
 
         <div id="quiz-area">
-            <div class="header-quiz">
-                <div style="display: flex; align-items: center;">
-                    <button class="btn-voltar" onclick="location.reload()" title="Voltar ao início">←</button>
-                    <span id="label-materia">MATÉRIA</span>
-                </div>
-                <span id="label-progresso">Questão 1 de 50</span>
-            </div>
-            <div class="progress-container">
-                <div id="progress-bar"></div>
+            <div style="display:flex; justify-content: space-between; align-items: center;">
+                <span id="num-questao" style="font-weight: bold; color: var(--primary);">Questão 1</span>
+                <span id="categoria"
+                    style="font-size: 0.8rem; background: #eee; padding: 4px 8px; border-radius: 4px;">GERAL</span>
             </div>
 
-            <div id="pergunta-texto"></div>
-            <div id="opcoes" class="opcoes-grid"></div>
+            <div style="display:flex; justify-content: space-between; align-items: center;">
+               
+                <span id="categoria"
+                    style="font-size: 0.8rem; background: #eee; padding: 4px 8px; border-radius: 4px;"><a href="teste.html">INICIO</a></span>
+            </div>
+            <p id="pergunta" class="pergunta-texto"></p>
+            <div id="opcoes"></div>
 
-            <div id="area-feedback">
-                <strong id="res-titulo"></strong>
-                <p id="explicacao-corpo"></p>
-                <button class="btn-acao" onclick="next()">Próxima Questão</button>
+            <div id="feedback">
+                <strong id="status-msg"></strong>
+                <p id="explicacao" style="margin: 10px 0; font-style: italic;"></p>
+                <button class="btn-next" onclick="proxima()">PRÓXIMA QUESTÃO »</button>
             </div>
         </div>
     </div>
 
     <script>
-        const bancoMaster = {
-            micro: [
-                { p: "Qual o tamanho do Program Counter (PC) no 8051 padrão?", o: ["8 bits", "16 bits", "32 bits", "64 bits"], c: 1, e: "O PC tem 16 bits para endereçar até 64KB de memória." },
-                { p: "O que significa RISC?", o: ["Reduced Instruction Set Computer", "Refined Integrated System", "Rapid Instruction Set", "Real Integrated System"], c: 0, e: "Foca em poucas instruções para execução rápida." },
-                { p: "Memória volátil que perde dados ao desligar:", o: ["Flash", "EEPROM", "RAM", "ROM"], c: 2, e: "A RAM é volátil." },
-                { p: "Vetor de Interrupção é:", o: ["Um pino", "Um endereço fixo na memória", "Uma variável", "O clock"], c: 1, e: "É para onde o CPU pula quando ocorre interrupção." },
-                { p: "Registrador do 8051 para matemática principal:", o: ["B", "DPTR", "ACC", "R0"], c: 2, e: "O Acumulador realiza as contas." },
-                { p: "Função do Watchdog Timer:", o: ["Aumentar clock", "Reiniciar se travar", "Esquentar chip", "Medir luz"], c: 1, e: "Garante que o sistema reinicie em falhas." },
-                { p: "Diferença da arquitetura Harvard:", o: ["Barramentos separados para dados/instruções", "Mais memória", "Lentidão", "Apenas um barramento"], c: 0, e: "Permite acesso paralelo." },
-                { p: "Técnica de Debounce serve para:", o: ["Limpar ruídos de botões", "Acelerar CPU", "Gastar menos", "ADC"], c: 0, e: "Evita múltiplos cliques falsos." },
-                { p: "O que é Duty Cycle no PWM?", o: ["Frequência", "Tempo em nível alto", "Tensão total", "Amperagem"], c: 1, e: "Define a porcentagem do pulso ligado." },
-                { p: "Resolução ADC de 10 bits:", o: ["256", "512", "1024", "2048"], c: 2, e: "2^10 = 1024." },
-                { p: "Composição do DPTR:", o: ["DPH e DPL", "R0 e R1", "ACC e B", "T0 e T1"], c: 0, e: "16 bits divididos em 2 de 8." },
-                { p: "Barramento de endereço define:", o: ["Velocidade", "Capacidade de memória", "Quantidade de bits", "Consumo"], c: 1, e: "Determina quantos locais ele acessa." },
-                { p: "Palavra 'volatile' em C serve para:", o: ["Variáveis mutáveis por hardware/interrupção", "Constantes", "Otimizar código", "Ponteiros"], c: 0, e: "Impede o compilador de remover a variável." },
-                { p: "Pipeline em processadores é:", o: ["Vários estágios de instruções em paralelo", "Um cano", "Memória RAM", "Linguagem"], c: 0, e: "Melhora o fluxo de execução." },
-                { p: "Fios do I2C:", o: ["1", "2 (SDA/SCL)", "4", "3"], c: 1, e: "Dados e Clock serial." },
-                { p: "Bit de paridade serve para:", o: ["Velocidade", "Detectar erros", "Criptografia", "Reset"], c: 1, e: "Verifica integridade simples." },
-                { p: "Power-down mode:", o: ["Clock para, consumo mínimo", "CPU lento", "Desliga IO", "Apaga RAM"], c: 0, e: "Estado de hibernação total." },
-                { p: "JTAG é usado para:", o: ["Depuração e programação", "Wifi", "Som", "Monitor"], c: 0, e: "Interface de teste de hardware." },
-                { p: "Microcontrolador vs Microprocessador:", o: ["Chip único vs CPU pura", "Preço", "Tamanho", "Cor"], c: 0, e: "Microcontrolador integra tudo." },
-                { p: "Baud Rate é:", o: ["Bits por segundo", "Tensão", "Distância", "Nome"], c: 0, e: "Velocidade da serial." },
-                { p: "Retorno de interrupção em Assembly:", o: ["RET", "RETI", "JMP", "POP"], c: 1, e: "RETI limpa a flag de interrupção." },
-                { p: "SCON no 8051 controla:", o: ["Timers", "Serial", "ADC", "PWM"], c: 1, e: "Serial Control." },
-                { p: "Timer vs Counter:", o: ["Relógio interno vs pulsos externos", "Igual", "Analógico", "Digital"], c: 0, e: "Timer usa o clock interno." },
-                { p: "Pull-up interno garante:", o: ["Nível alto", "Nível baixo", "Reset", "Curto"], c: 0, e: "Puxa a tensão para VCC." },
-                { p: "Deadline em RTOS:", o: ["Fim de vida", "Tempo limite de tarefa", "Reset", "Loop"], c: 1, e: "Obrigatório cumprir no tempo." },
-                { p: "Protocolo SPI é:", o: ["Full-duplex", "Half-duplex", "1 fio", "Lento"], c: 0, e: "Síncrono e veloz." },
-                { p: "Vetor Reset 8051:", o: ["0000H", "0003H", "000BH", "FFFFH"], c: 0, e: "Onde tudo começa." },
-                { p: "TMOD serve para:", o: ["Modo Timer", "Modo Serial", "Modo Reset", "Baud"], c: 0, e: "Configura os Timers." },
-                { p: "Open-drain exige:", o: ["Pull-up externo", "Pull-down", "Nada", "Terra"], c: 0, e: "Precisa de resistor para nível alto." },
-                { p: "Bank Switching no 8051:", o: ["Troca registradores R0-R7", "Muda Flash", "Clock", "RAM"], c: 0, e: "Otimiza contexto." },
-                { p: "Pino EA=0 no 8051:", o: ["Memória externa", "Interna", "Reset", "Clock"], c: 0, e: "External Access." },
-                { p: "Latência de interrupção:", o: ["Tempo de resposta", "Tempo da ISR", "Clock", "Erro"], c: 0, e: "Atraso para iniciar o serviço." },
-                { p: "Assembly é:", o: ["Baixo nível", "Alto nível", "Script", "Web"], c: 0, e: "Linguagem de máquina legível." },
-                { p: "NOP faz:", o: ["Nada (consome ciclo)", "Reset", "Soma", "Pula"], c: 0, e: "No Operation." },
-                { p: "Bootloader permite:", o: ["Gravar sem gravador dedicado", "Rodar Windows", "Aumentar RAM", "Resfriar"], c: 0, e: "Atualiza via serial." },
-                { p: "Full-duplex significa:", o: ["Envia/Recebe simultâneo", "Soma", "Lento", "1 sentido"], c: 0, e: "Bidirecional total." },
-                { p: "Stack Pointer guarda:", o: ["Endereço de retorno e dados pilha", "Clock", "Senha", "ADC"], c: 0, e: "Gerencia a pilha." },
-                { p: "CISC foca em:", o: ["Instruções complexas", "Simples", "Reduzidas", "Sem clock"], c: 0, e: "Complex Instruction Set." },
-                { p: "Port 0 do 8051:", o: ["Precisa de pull-ups externos", "Tem interna", "É analógica", "Reset"], c: 0, e: "É open-drain nativo." },
-                { p: "Bit Carry (CY):", o: ["Vai-um", "Erro", "Temperatura", "Paridade"], c: 0, e: "Sinaliza estouro aritmético." },
-                { p: "Cristal gera:", o: ["Clock", "Voltagem", "Bits", "Dados"], c: 0, e: "Pulsação do sistema." },
-                { p: "DJNZ decrementa e:", o: ["Pula se não zero", "Reseta", "Soma", "Para"], c: 0, e: "Decrement Jump Not Zero." },
-                { p: "Erro quantização ADC:", o: ["Diferença valor real vs digital", "Curto", "Programação", "Fio"], c: 0, e: "Limitado pelos bits." },
-                { p: "Brown-out Reset:", o: ["Queda de tensão", "Calor", "Botão", "Software"], c: 0, e: "Protege contra voltagem baixa." },
-                { p: "Protocolo CAN é para:", o: ["Automotivo/Indústria", "Calculadora", "Web", "Fone"], c: 0, e: "Robusto contra ruído." },
-                { p: "Registrador B usado em:", o: ["MUL e DIV", "Soma", "Reset", "Clock"], c: 0, e: "Parceiro do ACC." },
-                { p: "Memory Mapping:", o: ["Hardwares como endereços de RAM", "Desenho", "Limpeza", "Flash"], c: 0, e: "Acessa pinos como memória." },
-                { p: "Pino RESET:", o: ["Estado inicial", "Apagar tudo", "Mais rápido", "Som"], c: 0, e: "Recomeça o código." },
-                { p: "Interrupção Mascarável:", o: ["Pode desativar", "Invisível", "Fixa", "Fatal"], c: 0, e: "Habilita via código." },
-                { p: "Linker une:", o: ["Arquivos objeto no executável", "C em Assembly", "Código em PDF", "Fios"], c: 0, e: "Finaliza o processo de compilação." }
-            ],
-            calculo: [
-                { p: "Qual a derivada de x²?", o: ["2x", "x", "2", "1/x"], c: 0, e: "Regra da potência: d/dx(x^n) = n*x^(n-1)." },
-                { p: "A integral de cos(x) dx é:", o: ["sen(x) + C", "-sen(x) + C", "cos(x)", "tan(x)"], c: 0, e: "A derivada do seno é o cosseno." },
-                { p: "Derivada de e^x:", o: ["e^x", "xe^x", "ln(x)", "0"], c: 0, e: "Função exponencial é invariante na derivada." },
-                { p: "O limite de 1/x quando x tende ao infinito é:", o: ["0", "1", "Infinito", "Indeterminado"], c: 0, e: "O denominador cresce e a fração some." },
-                { p: "A derivada de uma constante é:", o: ["0", "1", "A constante", "x"], c: 0, e: "Constantes não variam." },
-                { p: "Integral de 1/x dx:", o: ["ln|x| + C", "e^x", "x", "1"], c: 0, e: "Padrão logarítmico." },
-                { p: "Derivada de sen(x):", o: ["cos(x)", "-cos(x)", "tan(x)", "sen(x)"], c: 0, e: "Básico de trigonometria." },
-                { p: "Regra da Cadeia serve para:", o: ["Funções compostas", "Produtos", "Somas", "Divisões"], c: 0, e: "d/dx[f(g(x))]." },
-                { p: "Integral de x^n:", o: ["x^(n+1)/(n+1)", "nx", "x^n", "1"], c: 0, e: "Regra inversa da potência." },
-                { p: "O que é o Teorema Fundamental do Cálculo?", o: ["Relaciona derivada e integral", "Soma números", "Calcula área", "Define zero"], c: 0, e: "Diz que a integral é a operação inversa." },
-                { p: "Derivada de ln(x):", o: ["1/x", "e^x", "1", "ln(x)"], c: 0, e: "Propriedade fundamental." },
-                { p: "Integral de e^x dx:", o: ["e^x + C", "ln x", "x", "e"], c: 0, e: "Permanece igual." },
-                { p: "Derivada de tan(x):", o: ["sec²(x)", "cos(x)", "sen(x)", "1"], c: 0, e: "Fórmula clássica." },
-                { p: "Máximos e Mínimos são achados quando:", o: ["f'(x) = 0", "f(x) = 0", "f''(x) = 0", "x = 0"], c: 0, e: "Ponto crítico onde a inclinação é zero." },
-                { p: "Se f''(x) > 0, a concavidade é:", o: ["Para cima", "Para baixo", "Reta", "Nula"], c: 0, e: "Teste da segunda derivada." },
-                { p: "Integral definida calcula:", o: ["Área sob a curva", "Volume", "Soma", "Velocidade"], c: 0, e: "Entre limites a e b." },
-                { p: "Derivada de constante vezes função c*f(x):", o: ["c * f'(x)", "0", "c", "f'(x)"], c: 0, e: "A constante sai da derivada." },
-                { p: "Derivada do produto (u*v):", o: ["u'v + uv'", "u'v'", "u+v", "u/v"], c: 0, e: "Regra de Leibniz." },
-                { p: "Derivada do quociente (u/v):", o: ["(u'v - uv')/v²", "u'/v'", "u-v", "uv"], c: 0, e: "Fórmula padrão." },
-                { p: "O que é uma assíntota?", o: ["Reta que a curva se aproxima sem tocar", "Um ponto", "Uma curva", "O eixo x"], c: 0, e: "Comportamento no limite." },
-                { p: "Limite de sen(x)/x quando x -> 0:", o: ["1", "0", "Infinito", "Indeterminado"], c: 0, e: "Limite fundamental trigonométrico." },
-                { p: "Integral de sen(x) dx:", o: ["-cos(x) + C", "cos(x)", "sen(x)", "tan(x)"], c: 0, e: "Cuidado com o sinal negativo." },
-                { p: "O que é o diferencial dx?", o: ["Variação infinitesimal de x", "Um número", "Uma função", "O erro"], c: 0, e: "Indica a variável de integração." },
-                { p: "Derivada de cot(x):", o: ["-csc²(x)", "sec²(x)", "1", "0"], c: 0, e: "Trigonométrica." },
-                { p: "Ponto de inflexão ocorre quando:", o: ["Concavidade muda", "f(x)=0", "Máximo", "Mínimo"], c: 0, e: "Mudança de sinal na f''(x)." },
-                { p: "Integral de constante 'k' dx:", o: ["kx + C", "k", "x", "0"], c: 0, e: "Gera uma reta inclinada." },
-                { p: "Regra de L'Hôpital resolve:", o: ["Indeterminações 0/0 ou inf/inf", "Somas", "Produtos", "Raízes"], c: 0, e: "Usa derivadas no limite." },
-                { p: "Derivada de log_a(x):", o: ["1/(x ln a)", "1/x", "a^x", "0"], c: 0, e: "Base genérica." },
-                { p: "Integral de sec²(x) dx:", o: ["tan(x) + C", "sen(x)", "cos(x)", "x"], c: 0, e: "Inversa da derivada da tangente." },
-                { p: "O que é uma primitiva?", o: ["A função antes de ser derivada", "A primeira função", "O zero", "A derivada"], c: 0, e: "Antiderivada." },
-                { p: "Derivada de a^x:", o: ["a^x * ln a", "a^x", "xa^(x-1)", "0"], c: 0, e: "Exponencial de base a." },
-                { p: "Volume de sólido de revolução usa:", o: ["Integral", "Soma", "Multiplicação", "Derivada"], c: 0, e: "Geralmente método dos discos." },
-                { p: "Derivada de sec(x):", o: ["sec(x)tan(x)", "tan(x)", "1", "0"], c: 0, e: "Fórmula de tabela." },
-                { p: "Integral de 1/sqrt(1-x²) dx:", o: ["arcsen(x) + C", "sen(x)", "arccos(x)", "tan(x)"], c: 0, e: "Trigonométrica inversa." },
-                { p: "Integral de 1/(1+x²) dx:", o: ["arctan(x) + C", "tan(x)", "ln x", "e^x"], c: 0, e: "Muito comum em provas." },
-                { p: "A regra da substituição é o inverso da:", o: ["Regra da cadeia", "Regra do produto", "Soma", "Divisão"], c: 0, e: "u-substitution." },
-                { p: "Integração por partes vem da:", o: ["Regra do produto", "Quociente", "Cadeia", "Soma"], c: 0, e: "Integral de udv = uv - integral vdu." },
-                { p: "Limite de e^x quando x -> -infinito:", o: ["0", "Infinito", "1", "-1"], c: 0, e: "Exponencial some no negativo." },
-                { p: "Derivada de arccos(x):", o: ["-1/sqrt(1-x²)", "1/x", "0", "sen(x)"], c: 0, e: "Inversa do cosseno." },
-                { p: "Integral tripla calcula:", o: ["Volume em 3D", "Área", "Linha", "Ponto"], c: 0, e: "Cálculo multivariável." },
-                { p: "Derivada de f(x)=x:", o: ["1", "0", "x²", "x"], c: 0, e: "Inclinação unitária." },
-                { p: "Integral de x dx:", o: ["x²/2 + C", "x", "1", "2x"], c: 0, e: "Básico de potência." },
-                { p: "O que é gradiente?", o: ["Vetor de derivadas parciais", "Uma reta", "Um número", "O erro"], c: 0, e: "Direção de maior crescimento." },
-                { p: "Derivada de csc(x):", o: ["-csc(x)cot(x)", "sec(x)", "1", "0"], c: 0, e: "Tabela." },
-                { p: "Série de Taylor serve para:", o: ["Aproximar funções por polinômios", "Somar", "Dividir", "Integrar"], c: 0, e: "Expansão em torno de um ponto." },
-                { p: "Integral de tan(x) dx:", o: ["-ln|cos x| + C", "sec² x", "sen x", "0"], c: 0, e: "Usa substituição u=cos x." },
-                { p: "O que é divergência?", o: ["Escalar de um campo vetorial", "Um vetor", "Uma reta", "Zero"], c: 0, e: "Cálculo vetorial." },
-                { p: "Derivada de raiz de x:", o: ["1/(2*sqrt(x))", "x", "1", "2"], c: 0, e: "x^(1/2) vira (1/2)x^(-1/2)." },
-                { p: "O que é o Jacobiano?", o: ["Determinante para mudança de variáveis", "Um nome", "Uma integral", "Derivada simples"], c: 0, e: "Usado em integrais múltiplas." },
-                { p: "Cálculo diferencial foca em:", o: ["Taxas de variação", "Somas", "Áreas", "Gráficos fixos"], c: 0, e: "Estudo da mudança." }
-            ],
-            embarcados: [],
-            digital: [],
-            quant: []
-        };
+        // BANCO DE DADOS (EXPANSÍVEL)
+        const banco = [
+            // --- LOTE 04: IDOSO, MENTAL E FARMACO (QUESTÕES 161-260) ---
+            { p: "Qual a escala utilizada para avaliar o risco de úlcera por pressão (Lesão por Pressão)?", o: ["Escala de Glasgow", "Escala de Braden", "Escala de Morse", "Escala de Apgar"], c: 1, e: "A Escala de Braden avalia percepção sensorial, umidade, atividade, mobilidade, nutrição e fricção." },
+            { p: "O Estatuto do Idoso considera pessoa idosa aquela com idade igual ou superior a:", o: ["60 anos", "65 anos", "70 anos", "80 anos"], c: 0, e: "No Brasil, a Terceira Idade começa legalmente aos 60 anos." },
+            { p: "O principal sinal clínico do Mal de Alzheimer em estágio inicial é:", o: ["Perda de memória recente", "Incontinência fecal", "Paralisia de membros", "Cegueira"], c: 0, e: "O esquecimento de fatos recentes é o marcador clássico da doença." },
+            { p: "A 'Polifarmácia' no idoso é definida como o uso de:", o: ["2 ou mais medicamentos", "5 ou mais medicamentos", "Apenas 1 medicamento", "Medicamentos injetáveis"], c: 1, e: "O uso simultâneo de 5 ou mais fármacos aumenta o risco de interações adversas no idoso." },
+            { p: "Qual o cuidado de enfermagem imediato em uma crise convulsiva?", o: ["Colocar um objeto na boca", "Segurar os braços da vítima", "Proteger a cabeça e afastar objetos próximos", "Fazer respiração boca a boca"], c: 2, e: "Deve-se evitar traumas secundários e manter as vias aéreas livres." },
+            { p: "O lítio é um medicamento utilizado principalmente para tratar:", o: ["Hipertensão", "Transtorno Bipolar", "Infecção urinária", "Diabetes"], c: 1, e: "O carbonato de lítio é um estabilizador de humor padrão-ouro." },
+            { p: "A contenção mecânica de pacientes psiquiátricos deve ser:", o: ["Feita apenas por um profissional", "O último recurso e sob supervisão direta", "Proibida em qualquer hipótese", "Feita com correntes metálicas"], c: 1, e: "É uma medida excepcional que exige prescrição e monitoramento rigoroso." },
+            { p: "O que caracteriza o 'Delirium' no idoso?", o: ["Confusão mental aguda e flutuante", "Perda crônica de memória", "Aumento da inteligência", "Melhora do sono"], c: 0, e: "Diferente da demência, o delirium é agudo e geralmente reversível se tratada a causa." },
+            { p: "A via de administração que possui a absorção mais rápida é:", o: ["Oral", "Intramuscular", "Endovenosa", "Subcutânea"], c: 2, e: "A via EV lança o fármaco diretamente na corrente sanguínea, sem passar por absorção." },
+            { p: "Qual o efeito colateral comum do uso de diuréticos de alça (ex: Furosemida)?", o: ["Aumento do potássio", "Queda do potássio (Hipocalemia)", "Ganho de peso", "Constipação"], c: 1, e: "Diuréticos como a furosemida aumentam a excreção de potássio na urina." },
+            { p: "O termo 'Inapetência' significa:", o: ["Falta de apetite", "Dificuldade de andar", "Excesso de sono", "Vontade de comer tudo"], c: 0, e: "Sinônimo de anorexia ou falta de vontade de comer." },
+            { p: "A Lei 10.216/2001 dispõe sobre a proteção e os direitos das pessoas com:", o: ["Câncer", "Transtornos Mentais", "Deficiência visual", "AIDS"], c: 1, e: "É a Lei da Reforma Psiquiátrica brasileira." },
+            { p: "Qual o antipsicótico típico muito utilizado em emergências psiquiátricas?", o: ["Haloperidol (Haldol)", "Dipirona", "Amoxicilina", "Losartana"], c: 0, e: "O Haldol é amplamente usado para controle de agitação psicomotora." },
+            { p: "O exame que avalia o estado cognitivo rápido de um idoso é o:", o: ["Mini Exame do Estado Mental (MEEM)", "Eletrocardiograma", "Raio-X de tórax", "Hemograma"], c: 0, e: "O MEEM avalia orientação, memória, atenção e linguagem." },
+            { p: "A 'Janela Terapêutica' é:", o: ["O intervalo entre a dose eficaz e a dose tóxica", "O tempo que o remédio leva para fazer efeito", "A hora que o paciente acorda", "A validade do medicamento"], c: 0, e: "Quanto menor a janela, mais perigoso é o medicamento." },
+            { p: "O que significa 'Idoso Frágil'?", o: ["Idoso que faz academia", "Idoso com alta reserva funcional", "Idoso com vulnerabilidade a desfechos adversos (quedas, hospitalização)", "Qualquer pessoa com mais de 60 anos"], c: 2, e: "Fragilidade envolve perda de peso, exaustão e baixa atividade física." },
+            { p: "A via Sublingual é vantajosa pois:", o: ["Evita o metabolismo de primeira passagem pelo fígado", "É mais barata", "Dura 24 horas no corpo", "Pode ser usada com o paciente vomitando"], c: 0, e: "A absorção pela mucosa bucal vai direto para a circulação sistêmica." },
+            { p: "Qual a principal causa de quedas em idosos no domicílio?", o: ["Tapetes soltos e iluminação precária", "Excesso de comida", "Uso de sapatos ortopédicos", "Falta de televisão"], c: 0, e: "Fatores ambientais são os maiores responsáveis por acidentes domésticos." },
+            { p: "O 'Zolpidem' é um fármaco indicado para:", o: ["Tratamento de Insônia", "Combate a infecções", "Controle da Pressão", "Alívio de azia"], c: 0, e: "É um hipnótico não-benzodiazepínico de curta duração." },
+            { p: "O que é 'Ataxia'?", o: ["Falta de coordenação dos movimentos musculares", "Perda total da visão", "Aumento da temperatura", "Dificuldade de urinar"], c: 0, e: "Comum em doenças neurológicas ou intoxicações." },
+            { p: "A técnica de 'Z-track' na injeção IM serve para:", o: ["Dizer onde aplicar", "Evitar o refluxo do medicamento para o tecido subcutâneo", "Aumentar a dor", "Diminuir a velocidade da aplicação"], c: 1, e: "Veda o trajeto da agulha na musculatura (comumente usada para ferro)." },
+            { p: "A 'Depressão Maior' no idoso pode ser confundida com:", o: ["Gripe", "Demência (Pseudodemência)", "Catarata", "Fraturas"], c: 1, e: "O idoso deprimido pode apresentar déficit cognitivo similar à demência." },
+            { p: "Qual o principal risco do uso de Benzodiazepínicos (ex: Diazepam) em idosos?", o: ["Aumento da memória", "Risco de quedas e sedação excessiva", "Cura da diabetes", "Melhora da visão"], c: 1, e: "Podem causar tontura, relaxamento muscular excessivo e confusão." },
+            { p: "O termo 'Nistagmo' refere-se a:", o: ["Movimentos involuntários dos olhos", "Tremor nas mãos", "Ronco durante o sono", "Manchas na pele"], c: 0, e: "Movimentos oscilatórios e rítmicos do globo ocular." },
+            { p: "A Enfermagem deve orientar o paciente que usa Alendronato (para osteoporose) a:", o: ["Deitar logo após tomar", "Tomar em jejum e permanecer em pé/sentado por 30 min", "Tomar com leite", "Tomar antes de dormir"], c: 1, e: "Evita irritação esofágica grave." },
+            { p: "O que é 'Anedonia'?", o: ["Perda da capacidade de sentir prazer", "Excesso de felicidade", "Medo de lugares abertos", "Dificuldade de ler"], c: 0, e: "Sintoma central da depressão." },
+            { p: "A 'Vitamina B12' é essencial para:", o: ["Visão noturna", "Sistema nervoso e formação de hemácias", "Saúde dos dentes", "Fortalecimento das unhas"], c: 1, e: "Sua falta causa anemia perniciosa e danos neurológicos." },
+            { p: "Qual o local de aplicação da Insulina para absorção mais lenta?", o: ["Abdome", "Coxa", "Braço", "Glúteo"], c: 1, e: "O abdome é a mais rápida; a coxa e glúteo são mais lentas." },
+            { p: "O que caracteriza a 'Esquizofrenia'?", o: ["Apenas tristeza", "Distorções do pensamento, percepção (alucinações) e afeto", "Esquecimento de nomes", "Aumento da pressão arterial"], c: 1, e: "É um transtorno psicótico crônico." },
+            { p: "A 'Tolerância' a uma droga ocorre quando:", o: ["O corpo precisa de doses maiores para o mesmo efeito", "O paciente para de tomar", "O efeito fica muito forte com pouca dose", "A droga estraga"], c: 0, e: "Adaptação do organismo ao uso contínuo da substância." },
+            { p: "Qual o cuidado ao administrar Vancomicina EV?", o: ["Aplicar rápido (em bolus)", "Infusão lenta para evitar a 'Síndrome do Homem Vermelho'", "Não precisa diluir", "Aplicar apenas no glúteo"], c: 1, e: "A infusão rápida libera histamina e causa rubor e queda de pressão." },
+            { p: "O que é 'Ginecomastia'?", o: ["Aumento das mamas em homens", "Crescimento de pelos em mulheres", "Inflamação da gengiva", "Dor nas articulações"], c: 0, e: "Pode ser efeito colateral de alguns medicamentos ou desequilíbrio hormonal." },
+            { p: "O 'CAPS' significa:", o: ["Centro de Apoio para Sangue", "Centro de Atenção Psicossocial", "Conselho de Assistência para Surdos", "Clínica de Atendimento Primário à Saúde"], c: 1, e: "Equipamento estratégico da Rede de Atenção Psicossocial (RAPS)." },
+            { p: "A 'Farmacocinética' estuda:", o: ["O que o corpo faz com o fármaco", "O que o fármaco faz com o corpo", "O preço dos remédios", "A cor das pílulas"], c: 0, e: "Envolve absorção, distribuição, metabolismo e excreção." },
+            { p: "Qual vitamina é produzida na pele através da exposição solar?", o: ["Vitamina A", "Vitamina C", "Vitamina D", "Vitamina E"], c: 2, e: "A radiação UV ativa a síntese de vitamina D." },
+            { p: "O 'Glaucoma' é uma doença caracterizada por:", o: ["Aumento da pressão intraocular", "Opacidade do cristalino", "Infecção na retina", "Perda de cílios"], c: 0, e: "Pode levar à cegueira se não tratado." },
+            { p: "O termo 'Lipodistrofia' na aplicação de insulina refere-se a:", o: ["Melhora da pele", "Alterações no tecido adiposo por falta de rodízio", "Aumento da fome", "Infecção no local"], c: 1, e: "Gera nódulos que prejudicam a absorção da insulina." },
+            { p: "A 'Amoxicilina' pertence a qual classe?", o: ["Antifúngico", "Antiviral", "Antibiótico (Penicilina)", "Analgésico"], c: 2, e: "Usada para infecções bacterianas." },
+            { p: "O que é 'Presbiacusia'?", o: ["Perda auditiva relacionada ao envelhecimento", "Visão cansada", "Dificuldade de sentir cheiro", "Tremor"], c: 0, e: "Degeneração natural da audição no idoso." },
+            { p: "Qual o principal sintoma do Infarto Agudo do Miocárdio em idosos?", o: ["Sempre dor forte no peito", "Pode ser atípico (falta de ar ou mal-estar sem dor)", "Apenas dor no pé", "Febre alta"], c: 1, e: "Idosos e diabéticos frequentemente têm infartos 'silenciosos' ou atípicos." },
+            { p: "A 'Digoxina' é usada para tratar:", o: ["Insuficiência Cardíaca", "Gripe", "Dor de dente", "Fraturas"], c: 0, e: "É um cardiotônico que aumenta a força de contração do coração." },
+            { p: "O sinal de intoxicação digitálica (pela Digoxina) inclui:", o: ["Visão amarelada/esverdeada e náuseas", "Aumento do apetite", "Crescimento de unhas", "Melhora da audição"], c: 0, e: "Xantopsia é um sinal clássico de toxicidade." },
+            { p: "O que é 'Sarcopenia'?", o: ["Perda de massa e força muscular no idoso", "Aumento da gordura abdominal", "Doença dos ossos de vidro", "Perda de dentes"], c: 0, e: "Contribui para a fragilidade e perda de autonomia." },
+            { p: "A 'Catarata' é:", o: ["Aumento da pressão do olho", "Opacificação do cristalino", "Rasgo na retina", "Inflamação da pálpebra"], c: 1, e: "Causa visão embaçada e pode ser corrigida com cirurgia." },
+            { p: "O 'Warfarin' (Marevan) é um:", o: ["Anticoagulante oral", "Anti-inflamatório", "Vitamina", "Antibiótico"], c: 0, e: "Exige controle rigoroso do tempo de protrombina (TAP/INR)." },
+            { p: "O que significa 'Prandial'?", o: ["Relacionado à refeição", "Relacionado ao sono", "Relacionado ao exercício", "Relacionado ao banho"], c: 0, e: "Ex: Insulina prandial é a tomada junto à comida." },
+            { p: "A 'Amnésia Retrógada' é:", o: ["Esquecer fatos antes do trauma", "Esquecer fatos novos", "Nunca esquecer nada", "Lembrar do futuro"], c: 0, e: "Perda de memórias já consolidadas." },
+            { p: "O 'Espironolactona' é um diurético:", o: ["Poupador de potássio", "Que joga potássio fora", "Para emagrecer", "Que aumenta o açúcar"], c: 0, e: "Age nos túbulos renais poupando o potássio da excreção." },
+            { p: "O que é 'Iatrogenia'?", o: ["Dano causado pelo tratamento médico/equipe de saúde", "Cura milagrosa", "Doença genética", "Falta de hospitais"], c: 0, e: "Pode ser por erro, excesso de medicamentos ou procedimentos." },
+            { p: "A 'Escala de Depressão Geriátrica (GDS)' é usada para:", o: ["Medir a pressão do idoso", "Rastrear sintomas depressivos em idosos", "Verificar se o idoso ouve bem", "Contar quantos remédios ele toma"], c: 1, e: "Ferramenta de rastreio de humor na geriatria." },
+            { p: "O que significa a sigla 'CME' no ambiente hospitalar?", o: ["Centro de Medicina Especializada", "Central de Material e Esterilização", "Controle de Medicamentos Estratégicos", "Conselho Médico de Emergência"], c: 1, e: "A CME é o setor responsável pelo reprocessamento de artigos médico-hospitalares." },
+            { p: "Qual o indicador biológico utilizado para testar a eficácia da autoclave?", o: ["Bacillus atrophaeus", "Geobacillus stearothermophilus", "Escherichia coli", "Staphylococcus aureus"], c: 1, e: "O Geobacillus stearothermophilus é o microrganismo padrão para calor úmido por ser termofílico." },
+            { p: "A cirurgia realizada para fins de diagnóstico (ex: biópsia) é classificada como:", o: ["Curativa", "Paliativa", "Diagnóstica ou Exploratória", "Reparadora"], c: 2, e: "Cirurgias diagnósticas visam confirmar a presença ou extensão de uma patologia." },
+            { p: "Na escala de classificação de cirurgias quanto ao potencial de contaminação, uma cirurgia em tecidos colonizados por flora microbiana pouco numerosa é considerada:", o: ["Limpa", "Potencialmente Contaminada", "Contaminada", "Infectada"], c: 1, e: "Cirurgias em sistemas respiratório, digestório ou urinário sem inflamação são potencialmente contaminadas." },
+            { p: "O que é o 'Checklist de Cirurgia Segura' da OMS?", o: ["Uma lista de compras para o hospital", "Uma ferramenta para reduzir erros e eventos adversos no centro cirúrgico", "Um guia de exercícios pós-operatórios", "Um formulário de alta médica"], c: 1, e: "O checklist foca em momentos críticos: antes da anestesia, antes da incisão e antes do paciente sair da sala." },
+            { p: "Qual a função do instrumentador cirúrgico?", o: ["Anestesiar o paciente", "Fornecer os instrumentos ao cirurgião de forma ordenada e asséptica", "Limpar a sala após a cirurgia", "Realizar a cirurgia sozinho"], c: 1, e: "O instrumentador antecipa as necessidades do cirurgião e zela pela técnica asséptica." },
+            { p: "O que caracteriza a 'Posição de Fowler'?", o: ["Paciente deitado com a cabeça mais baixa que os pés", "Cabeceira elevada entre 45 e 60 graus", "Deitado de bruços", "Deitado de lado"], c: 1, e: "Muito utilizada para melhorar a expansão pulmonar e conforto pós-operatório." },
+            { p: "A esterilização por 'Calor Seco' é realizada em qual equipamento?", o: ["Autoclave", "Estufa", "Micro-ondas", "Lavadora ultrassônica"], c: 1, e: "A estufa utiliza altas temperaturas por tempo prolongado, sendo menos eficiente que a autoclave." },
+            { p: "Um artigo 'Crítico' é aquele que:", o: ["Entra em contato com pele íntegra", "Entra em contato com tecidos estéreis ou sistema vascular", "Entra em contato com mucosas", "Não entra em contato com o paciente"], c: 1, e: "Artigos críticos (ex: bisturis) exigem obrigatoriamente esterilização." },
+            { p: "O tempo de jejum pré-operatório padrão para líquidos claros é de geralmente:", o: ["2 horas", "8 horas", "12 horas", "24 horas"], c: 0, e: "Protocolos modernos (como o ACERTO) permitem líquidos claros até 2h antes da cirurgia." },
+            { p: "O que é 'Sutura'?", o: ["O ato de cortar o tecido", "A união de bordas de uma ferida para facilitar a cicatrização", "A aplicação de gesso", "A drenagem de um abscesso"], c: 1, e: "Sutura é o fechamento de planos anatômicos com fios cirúrgicos." },
+            { p: "A área do Centro Cirúrgico onde é obrigatório o uso de máscara, propé e gorro é a:", o: ["Área Restrita", "Área Não Restrita", "Área Semicrítica", "Recepção"], c: 0, e: "A área restrita inclui salas de cirurgia e corredores internos." },
+            { p: "O que é 'Hemorragia'?", o: ["Aumento da pressão", "Perda excessiva de sangue", "Falta de ar", "Febre"], c: 1, e: "Pode ser interna ou externa e exige intervenção rápida." },
+            { p: "A 'Anestesia Raquidiana' é administrada em qual local?", o: ["Veia do braço", "Espaço subaracnóideo (coluna)", "Músculo glúteo", "Inalação por máscara"], c: 1, e: "O anestésico é injetado no líquido cefalorraquidiano." },
+            { p: "O termo 'Pós-operatório imediato' compreende qual período?", o: ["As primeiras 24 horas após a cirurgia", "A primeira semana", "O primeiro mês", "Apenas a hora da cirurgia"], c: 0, e: "É o período crítico de recuperação da anestesia e estabilização." },
+            { p: "O que significa 'Deiscência de Sutura'?", o: ["Cicatrização perfeita", "Abertura espontânea das bordas de uma ferida suturada", "Inflamação por fios", "Retirada de pontos"], c: 1, e: "É uma complicação pós-operatória que pode levar à evisceração." },
+            { p: "Qual o objetivo da lavagem das mãos cirúrgica (Degermação)?", o: ["Remover apenas a sujeira visível", "Eliminar a microbiota transitória e reduzir a residente", "Substituir o uso de luvas", "Hidratar a pele"], c: 1, e: "Dura entre 3 a 5 minutos com antisséptico escovando mãos e antebraços." },
+            { p: "O dreno de 'Penrose' funciona por qual mecanismo?", o: ["Sucção a vácuo", "Capilaridade e gravidade", "Pressão positiva", "Bomba elétrica"], c: 1, e: "É um dreno aberto de látex muito comum em cirurgias abdominais." },
+            { p: "A temperatura ideal de uma sala de cirurgia deve ser mantida entre:", o: ["15°C a 18°C", "18°C a 23°C", "25°C a 30°C", "35°C a 37°C"], c: 1, e: "Visa o conforto da equipe e a redução do crescimento bacteriano, sem causar hipotermia no paciente." },
+            { p: "O que é 'Evisceração'?", o: ["Saída de órgãos internos através de uma abertura na parede abdominal", "Um tipo de curativo", "Retirada da vesícula", "Inflamação da pele"], c: 0, e: "É uma emergência cirúrgica grave." },
+            { p: "Qual o gás utilizado para esterilização de materiais sensíveis ao calor?", o: ["Oxigênio", "Nitrogênio", "Óxido de Etileno", "Dióxido de Carbono"], c: 2, e: "O ETO é altamente eficaz, mas exige aeração por ser tóxico." },
+            { p: "O que significa 'Time Out' no centro cirúrgico?", o: ["Hora do lanche da equipe", "Pausa imediatamente antes da incisão para confirmação de dados", "Fim do expediente", "Atraso na cirurgia"], c: 1, e: "Confirma-se paciente, local cirúrgico, procedimento e equipamentos." },
+            { p: "A lavagem ultrassônica de materiais visa:", o: ["Esterilizar os objetos", "Remover sujidades em locais de difícil acesso por cavitação", "Secar o material", "Substituir a autoclave"], c: 1, e: "É uma etapa da limpeza automatizada na CME." },
+            { p: "O que é 'Hipoxia' no pós-operatório?", o: ["Aumento do açúcar", "Baixa saturação de oxigênio no sangue", "Aumento da temperatura", "Queda da pressão"], c: 1, e: "Pode ser causada por deprimissão respiratória anestésica." },
+            { p: "Qual a função do avental cirúrgico estéril?", o: ["Apenas identificar a equipe", "Barreira contra microrganismos e fluidos entre equipe e campo", "Esquentar o profissional", "Substituir a roupa privativa"], c: 1, e: "Mantém a esterilidade do campo operatório." },
+            { p: "A 'Escala de Aldrete e Kroulik' serve para:", o: ["Medir a dor", "Avaliar a prontidão do paciente para alta da recuperação pós-anestésica", "Verificar o risco de queda", "Classificar o tipo de cirurgia"], c: 1, e: "Avalia consciência, respiração, circulação e atividade motora." },
+            { p: "Um curativo 'Oclusivo' é aquele que:", o: ["Fica aberto ao ar", "Cobre totalmente a ferida sem permitir entrada de ar/contaminantes", "Usa apenas álcool", "É feito apenas com gaze solta"], c: 1, e: "Protege a ferida e mantém a umidade ideal." },
+            { p: "O que significa a terminologia cirúrgica com sufixo '-tomia'?", o: ["Retirada de um órgão", "Abertura ou incisão em um órgão", "Fixação de um órgão", "Sutura de um órgão"], c: 1, e: "Ex: Laparotomia (abertura do abdome)." },
+            { p: "A retirada da vesícula biliar chama-se:", o: ["Gastrectomia", "Colecistectomia", "Histerectomia", "Esplenectomia"], c: 1, e: "Colecisto = vesícula; ectomia = retirada." },
+            { p: "O que é 'Isquemia'?", o: ["Aumento do fluxo sanguíneo", "Deficiência de suprimento sanguíneo para um tecido", "Sangramento ativo", "Infecção generalizada"], c: 1, e: "Pode causar morte tecidual (necrose) se prolongada." },
+            { p: "Qual o principal risco do uso de eletrocautério (bisturi elétrico)?", o: ["Queimaduras e interferência em marca-passos", "Falta de corte", "Choque no cirurgião", "O barulho"], c: 0, e: "Exige o uso correto da placa dispersiva no paciente." },
+            { p: "O que significa 'Jejuar'?", o: ["Comer apenas pão", "Abstenção total de ingestão de alimentos e líquidos", "Beber apenas água", "Comer frutas"], c: 1, e: "Essencial para evitar broncoaspiração durante a anestesia." },
+            { p: "A 'Parada Cardiorrespiratória' em cirurgia deve ser tratada com:", o: ["Apenas massagem", "Protocolo de ACLS (Suporte Avançado de Vida)", "Apenas ventilação", "Esperar o paciente acordar"], c: 1, e: "Exige equipe treinada e carrinho de emergência pronto." },
+            { p: "O que é 'Síncope'?", o: ["Dor de cabeça", "Desmaio ou perda súbita de consciência", "Aumento dos batimentos", "Convulsão"], c: 1, e: "Causada por diminuição transitória do fluxo sanguíneo cerebral." },
+            { p: "A posição 'Trendelenburg Reverso' é usada para:", o: ["Drenar secreções do pulmão", "Cirurgias de cabeça e pescoço", "Aumentar a pressão nas pernas", "Parto normal"], c: 1, e: "O corpo fica inclinado com a cabeça mais alta que os pés." },
+            { p: "Qual a cor do recipiente para descarte de resíduos infectantes (biológicos)?", o: ["Azul", "Branco leitoso", "Vermelho", "Preto"], c: 1, e: "Sacos brancos identificados com o símbolo de risco biológico." },
+            { p: "O que significa '-stomia' na cirurgia?", o: ["Retirada", "Criação de uma abertura para o exterior (comunicação)", "Inflamação", "Corte"], c: 1, e: "Ex: Colostomia, Traqueostomia." },
+            { p: "A 'Analgesia' visa:", o: ["Fazer o paciente dormir", "Retirar ou diminuir a dor sem perda total da consciência", "Paralisar os músculos", "Aumentar a pressão"], c: 1, e: "Diferente da anestesia geral, o foco é o controle da dor." },
+            { p: "O que é 'Cianose'?", o: ["Pele amarelada", "Coloração azulada da pele por falta de oxigênio", "Pele muito vermelha", "Pele com manchas brancas"], c: 1, e: "Sinal importante de insuficiência respiratória." },
+            { p: "Qual o antisséptico mais usado para preparo da pele com álcool?", o: ["Clorexidina alcoólica", "Água oxigenada", "Soro fisiológico", "Éter"], c: 0, e: "A clorexidina tem excelente efeito residual." },
+            { p: "O 'Termo de Consentimento Livre e Esclarecido' deve ser assinado:", o: ["Após a cirurgia", "Antes da cirurgia, após explicação médica", "Apenas por crianças", "Apenas se o paciente quiser"], c: 1, e: "Documento legal indispensável que autoriza o procedimento." },
+            { p: "O que é 'Enfisema Subcutâneo'?", o: ["Ar sob a pele que gera crepitação ao toque", "Água no pulmão", "Infecção na derme", "Gordura no sangue"], c: 0, e: "Pode ocorrer após traumas torácicos ou laparoscopia." },
+            { p: "A monitorização básica na sala de cirurgia inclui:", o: ["Apenas o peso", "ECG, Oximetria, Pressão Arterial e Temperatura", "Apenas a cor da pele", "Teste de QI"], c: 1, e: "Sinais vitais essenciais para a segurança anestésica." },
+            { p: "O que é 'Trombose Venosa Profunda' (TVP)?", o: ["Sangramento na veia", "Formação de coágulo em veias profundas, geralmente pernas", "Aumento da veia", "Veia que sumiu"], c: 1, e: "Complicação temida no pós-operatório por risco de embolia pulmonar." },
+            { p: "Para evitar TVP no pós-operatório, recomenda-se:", o: ["Ficar imóvel por 3 dias", "Deambulação precoce e uso de meias elásticas", "Comer muito sal", "Não beber água"], c: 1, e: "O movimento ajuda no retorno venoso." },
+            { p: "O que é 'Atelectasia'?", o: ["Colapso de parte dos alvéolos pulmonares", "Coração aumentado", "Rim parado", "Fígado inflamado"], c: 0, e: "Causa comum de febre nas primeiras 24-48h pós-cirurgia." },
+            { p: "Qual a função do dreno de 'Portovac'?", o: ["Drenar urina", "Drenagem por sucção a vácuo de fluidos cirúrgicos", "Alimentar o paciente", "Injetar remédio"], c: 1, e: "Sistema fechado muito usado em cirurgias ortopédicas e plásticas." },
+            { p: "O que caracteriza a 'Anestesia Geral'?", o: ["Paciente acordado", "Inconsciência, analgesia, amnésia e relaxamento muscular", "Apenas perda de sensibilidade no braço", "Dor intensa"], c: 1, e: "Envolve a perda total da consciência e reflexos." },
+            { p: "A 'Paracentese' é o procedimento para retirar líquido do:", o: ["Pulmão", "Abdome (ascite)", "Cérebro", "Coração"], c: 1, e: "Punção da cavidade abdominal." },
+            { p: "O que é 'Bradicardia'?", o: ["Pulso rápido", "Pulso lento (abaixo de 60 bpm no adulto)", "Pulso ausente", "Pressão alta"], c: 1, e: "Pode ser efeito de anestésicos ou problemas cardíacos." },
+            { p: "Para administrar 1000ml de SF 0,9% em 24h, qual o gotejamento (gotas/min)?", o: ["7 gts/min", "14 gts/min", "21 gts/min", "28 gts/min"], c: 1, e: "Fórmula: V / (T*3). 1000 / (24*3) = 1000 / 72 = 13.8 (aprox. 14)." }
+        ];
 
-        let curMat = "";
-        let curIdx = 0;
-        let curHit = 0;
+        let atual = 0;
+        let acertos = 0;
+        let respondidas = 0;
 
-        function updateStats() {
-            let total = parseInt(localStorage.getItem('sim_total')) || 0;
-            let hits = parseInt(localStorage.getItem('sim_hits')) || 0;
-            if (total > 0) {
-                let p = ((hits / total) * 100).toFixed(1);
-                document.getElementById('perc-pos').innerText = p + "%";
-                document.getElementById('perc-neg').innerText = (100 - p).toFixed(1) + "%";
-            }
-        }
-
-        function start(m) {
-            if (bancoMaster[m].length === 0) return alert("Matéria em desenvolvimento! Tente Micro ou Cálculo.");
-            curMat = m; curIdx = 0; curHit = 0;
+        function iniciar() {
             document.getElementById('home').style.display = 'none';
             document.getElementById('quiz-area').style.display = 'block';
-            document.getElementById('label-materia').innerText = m.toUpperCase();
-            render();
+            atualizarDashboard();
+            carregarQuestao();
         }
 
-        function render() {
-            const q = bancoMaster[curMat][curIdx];
-            document.getElementById('label-progresso').innerText = `Questão ${curIdx + 1} de ${bancoMaster[curMat].length}`;
-            document.getElementById('progress-bar').style.width = `${(curIdx / bancoMaster[curMat].length) * 100}%`;
-            document.getElementById('pergunta-texto').innerText = q.p;
-            document.getElementById('area-feedback').style.display = 'none';
+        function carregarQuestao() {
+            const q = banco[atual];
+            document.getElementById('num-questao').innerText = `Questão ${atual + 1} de ${banco.length}`;
+            document.getElementById('pergunta').innerText = q.p;
+            document.getElementById('feedback').style.display = 'none';
 
-            const area = document.getElementById('opcoes');
-            area.innerHTML = '';
-            q.o.forEach((t, i) => {
-                const b = document.createElement('button');
-                b.className = 'opcao'; b.innerText = t;
-                b.onclick = () => check(i);
-                area.appendChild(b);
+            const areaOpcoes = document.getElementById('opcoes');
+            areaOpcoes.innerHTML = '';
+
+            q.o.forEach((texto, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'opcao';
+                btn.innerText = texto;
+                btn.onclick = () => checar(i);
+                areaOpcoes.appendChild(btn);
             });
         }
 
-        function check(i) {
-            const q = bancoMaster[curMat][curIdx];
+        function checar(escolha) {
+            const q = banco[atual];
             const btns = document.querySelectorAll('.opcao');
             btns.forEach(b => b.disabled = true);
 
-            let total = parseInt(localStorage.getItem('sim_total')) || 0;
-            let hits = parseInt(localStorage.getItem('sim_hits')) || 0;
-            localStorage.setItem('sim_total', total + 1);
-
-            if (i === q.c) {
-                btns[i].classList.add('correta');
-                curHit++;
-                localStorage.setItem('sim_hits', hits + 1);
-                document.getElementById('res-titulo').innerText = "✅ Correto!";
-                document.getElementById('res-titulo').style.color = "var(--success)";
+            respondidas++;
+            if (escolha === q.c) {
+                btns[escolha].classList.add('correta');
+                acertos++;
+                document.getElementById('status-msg').innerText = "✅ CORRETO!";
+                document.getElementById('status-msg').style.color = "var(--success)";
             } else {
-                btns[i].classList.add('errada');
+                btns[escolha].classList.add('errada');
                 btns[q.c].classList.add('correta');
-                document.getElementById('res-titulo').innerText = "❌ Errou!";
-                document.getElementById('res-titulo').style.color = "var(--error)";
+                document.getElementById('status-msg').innerText = "❌ INCORRETO.";
+                document.getElementById('status-msg').style.color = "var(--error)";
             }
-            document.getElementById('explicacao-corpo').innerHTML = `<strong>Explicação:</strong> ${q.e}`;
-            document.getElementById('area-feedback').style.display = 'block';
-            updateStats();
+
+            document.getElementById('explicacao').innerText = q.e;
+            document.getElementById('feedback').style.display = 'block';
+            atualizarDashboard();
         }
 
-        function next() {
-            curIdx++;
-            if (curIdx < bancoMaster[curMat].length) render();
+        function proxima() {
+            atual++;
+            if (atual < banco.length) carregarQuestao();
             else {
-                alert(`Fim! Acertos: ${curHit} de ${bancoMaster[curMat].length}`);
+                alert(`Fim do Simulado! Você acertou ${acertos} de ${banco.length}.`);
                 location.reload();
             }
         }
 
-        updateStats();
+        function atualizarDashboard() {
+            document.getElementById('stat-progresso').innerText = `${respondidas}/${banco.length}`;
+            if (respondidas > 0) {
+                let perc = ((acertos / respondidas) * 100).toFixed(1);
+                document.getElementById('stat-acertos').innerText = perc + "%";
+                document.getElementById('stat-erros').innerText = (100 - perc).toFixed(1) + "%";
+            }
+        }
     </script>
+
 </body>
 
 </html>
