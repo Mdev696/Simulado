@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Universitário Pro - 50 Questões</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --bg: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            max-width: 850px;
+            width: 100%;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background: #ebf2f7;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #d6e0e9;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .text-success {
+            color: var(--success);
+        }
+
+        .text-error {
+            color: var(--error);
+        }
+
+        /* Menu */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .btn-materia {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-materia:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Quiz Area */
+        #quiz-area {
+            display: none;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #eee;
+            height: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: 0.4s;
+        }
+
+        .header-quiz {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+
+        /* Botão Voltar */
+        .btn-voltar {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 0 10px 0 0;
+            transition: 0.2s;
+        }
+
+        .btn-voltar:hover {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        #pergunta-texto {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin: 20px 0;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+
+        .opcoes-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .opcao {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .opcao:hover:not(:disabled) {
+            border-color: var(--accent);
+            background: #f0f7ff;
+        }
+
+        .correta {
+            background: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .errada {
+            background: #f8d7da !important;
+            border-color: var(--error) !important;
+            color: #721c24;
+        }
+
+        #area-feedback {
+            margin-top: 25px;
+            padding: 20px;
+            border-left: 5px solid var(--accent);
+            background: #f1f8ff;
+            display: none;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .btn-acao {
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            .stat-value {
+                font-size: 1.2rem;
+            }
+
+            #pergunta-texto {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="home">
+            <h1 style="text-align: center; color: var(--primary);">Simulado Integrado</h1>
+
+            <div class="dashboard">
+                <div>
+                    <span class="stat-label">Desempenho Positivo</span>
+                    <span id="perc-pos" class="stat-value text-success">0%</span>
+                </div>
+                <div>
+                    <span class="stat-label">Desempenho Negativo</span>
+                    <span id="perc-neg" class="stat-value text-error">0%</span>
+                </div>
+            </div>
+
+            <div class="menu-grid">
+                <button class="btn-materia" onclick="start('micro')">Programação de Microcontroladores</button>
+                <button class="btn-materia" onclick="start('calculo')">Cálculo Diferencial e Integral</button>
+                <button class="btn-materia" onclick="start('embarcados')">Sistemas Embarcados</button>
+                <button class="btn-materia" onclick="start('digital')">Eletrônica Digital</button>
+                <button class="btn-materia" onclick="start('quant')">Métodos Quantitativos</button>
+            </div>
+        </div>
+
+        <div id="quiz-area">
+            <div class="header-quiz">
+                <div style="display: flex; align-items: center;">
+                    <button class="btn-voltar" onclick="location.reload()" title="Voltar ao início">←</button>
+                    <span id="label-materia">MATÉRIA</span>
+                </div>
+                <span id="label-progresso">Questão 1 de 50</span>
+            </div>
+            <div class="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+
+            <div id="pergunta-texto"></div>
+            <div id="opcoes" class="opcoes-grid"></div>
+
+            <div id="area-feedback">
+                <strong id="res-titulo"></strong>
+                <p id="explicacao-corpo"></p>
+                <button class="btn-acao" onclick="next()">Próxima Questão</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const bancoMaster = {
+            micro: [
+                { p: "Qual o tamanho do Program Counter (PC) no 8051 padrão?", o: ["8 bits", "16 bits", "32 bits", "64 bits"], c: 1, e: "O PC tem 16 bits para endereçar até 64KB de memória." },
+                { p: "O que significa RISC?", o: ["Reduced Instruction Set Computer", "Refined Integrated System", "Rapid Instruction Set", "Real Integrated System"], c: 0, e: "Foca em poucas instruções para execução rápida." },
+                { p: "Memória volátil que perde dados ao desligar:", o: ["Flash", "EEPROM", "RAM", "ROM"], c: 2, e: "A RAM é volátil." },
+                { p: "Vetor de Interrupção é:", o: ["Um pino", "Um endereço fixo na memória", "Uma variável", "O clock"], c: 1, e: "É para onde o CPU pula quando ocorre interrupção." },
+                { p: "Registrador do 8051 para matemática principal:", o: ["B", "DPTR", "ACC", "R0"], c: 2, e: "O Acumulador realiza as contas." },
+                { p: "Função do Watchdog Timer:", o: ["Aumentar clock", "Reiniciar se travar", "Esquentar chip", "Medir luz"], c: 1, e: "Garante que o sistema reinicie em falhas." },
+                { p: "Diferença da arquitetura Harvard:", o: ["Barramentos separados para dados/instruções", "Mais memória", "Lentidão", "Apenas um barramento"], c: 0, e: "Permite acesso paralelo." },
+                { p: "Técnica de Debounce serve para:", o: ["Limpar ruídos de botões", "Acelerar CPU", "Gastar menos", "ADC"], c: 0, e: "Evita múltiplos cliques falsos." },
+                { p: "O que é Duty Cycle no PWM?", o: ["Frequência", "Tempo em nível alto", "Tensão total", "Amperagem"], c: 1, e: "Define a porcentagem do pulso ligado." },
+                { p: "Resolução ADC de 10 bits:", o: ["256", "512", "1024", "2048"], c: 2, e: "2^10 = 1024." },
+                { p: "Composição do DPTR:", o: ["DPH e DPL", "R0 e R1", "ACC e B", "T0 e T1"], c: 0, e: "16 bits divididos em 2 de 8." },
+                { p: "Barramento de endereço define:", o: ["Velocidade", "Capacidade de memória", "Quantidade de bits", "Consumo"], c: 1, e: "Determina quantos locais ele acessa." },
+                { p: "Palavra 'volatile' em C serve para:", o: ["Variáveis mutáveis por hardware/interrupção", "Constantes", "Otimizar código", "Ponteiros"], c: 0, e: "Impede o compilador de remover a variável." },
+                { p: "Pipeline em processadores é:", o: ["Vários estágios de instruções em paralelo", "Um cano", "Memória RAM", "Linguagem"], c: 0, e: "Melhora o fluxo de execução." },
+                { p: "Fios do I2C:", o: ["1", "2 (SDA/SCL)", "4", "3"], c: 1, e: "Dados e Clock serial." },
+                { p: "Bit de paridade serve para:", o: ["Velocidade", "Detectar erros", "Criptografia", "Reset"], c: 1, e: "Verifica integridade simples." },
+                { p: "Power-down mode:", o: ["Clock para, consumo mínimo", "CPU lento", "Desliga IO", "Apaga RAM"], c: 0, e: "Estado de hibernação total." },
+                { p: "JTAG é usado para:", o: ["Depuração e programação", "Wifi", "Som", "Monitor"], c: 0, e: "Interface de teste de hardware." },
+                { p: "Microcontrolador vs Microprocessador:", o: ["Chip único vs CPU pura", "Preço", "Tamanho", "Cor"], c: 0, e: "Microcontrolador integra tudo." },
+                { p: "Baud Rate é:", o: ["Bits por segundo", "Tensão", "Distância", "Nome"], c: 0, e: "Velocidade da serial." },
+                { p: "Retorno de interrupção em Assembly:", o: ["RET", "RETI", "JMP", "POP"], c: 1, e: "RETI limpa a flag de interrupção." },
+                { p: "SCON no 8051 controla:", o: ["Timers", "Serial", "ADC", "PWM"], c: 1, e: "Serial Control." },
+                { p: "Timer vs Counter:", o: ["Relógio interno vs pulsos externos", "Igual", "Analógico", "Digital"], c: 0, e: "Timer usa o clock interno." },
+                { p: "Pull-up interno garante:", o: ["Nível alto", "Nível baixo", "Reset", "Curto"], c: 0, e: "Puxa a tensão para VCC." },
+                { p: "Deadline em RTOS:", o: ["Fim de vida", "Tempo limite de tarefa", "Reset", "Loop"], c: 1, e: "Obrigatório cumprir no tempo." },
+                { p: "Protocolo SPI é:", o: ["Full-duplex", "Half-duplex", "1 fio", "Lento"], c: 0, e: "Síncrono e veloz." },
+                { p: "Vetor Reset 8051:", o: ["0000H", "0003H", "000BH", "FFFFH"], c: 0, e: "Onde tudo começa." },
+                { p: "TMOD serve para:", o: ["Modo Timer", "Modo Serial", "Modo Reset", "Baud"], c: 0, e: "Configura os Timers." },
+                { p: "Open-drain exige:", o: ["Pull-up externo", "Pull-down", "Nada", "Terra"], c: 0, e: "Precisa de resistor para nível alto." },
+                { p: "Bank Switching no 8051:", o: ["Troca registradores R0-R7", "Muda Flash", "Clock", "RAM"], c: 0, e: "Otimiza contexto." },
+                { p: "Pino EA=0 no 8051:", o: ["Memória externa", "Interna", "Reset", "Clock"], c: 0, e: "External Access." },
+                { p: "Latência de interrupção:", o: ["Tempo de resposta", "Tempo da ISR", "Clock", "Erro"], c: 0, e: "Atraso para iniciar o serviço." },
+                { p: "Assembly é:", o: ["Baixo nível", "Alto nível", "Script", "Web"], c: 0, e: "Linguagem de máquina legível." },
+                { p: "NOP faz:", o: ["Nada (consome ciclo)", "Reset", "Soma", "Pula"], c: 0, e: "No Operation." },
+                { p: "Bootloader permite:", o: ["Gravar sem gravador dedicado", "Rodar Windows", "Aumentar RAM", "Resfriar"], c: 0, e: "Atualiza via serial." },
+                { p: "Full-duplex significa:", o: ["Envia/Recebe simultâneo", "Soma", "Lento", "1 sentido"], c: 0, e: "Bidirecional total." },
+                { p: "Stack Pointer guarda:", o: ["Endereço de retorno e dados pilha", "Clock", "Senha", "ADC"], c: 0, e: "Gerencia a pilha." },
+                { p: "CISC foca em:", o: ["Instruções complexas", "Simples", "Reduzidas", "Sem clock"], c: 0, e: "Complex Instruction Set." },
+                { p: "Port 0 do 8051:", o: ["Precisa de pull-ups externos", "Tem interna", "É analógica", "Reset"], c: 0, e: "É open-drain nativo." },
+                { p: "Bit Carry (CY):", o: ["Vai-um", "Erro", "Temperatura", "Paridade"], c: 0, e: "Sinaliza estouro aritmético." },
+                { p: "Cristal gera:", o: ["Clock", "Voltagem", "Bits", "Dados"], c: 0, e: "Pulsação do sistema." },
+                { p: "DJNZ decrementa e:", o: ["Pula se não zero", "Reseta", "Soma", "Para"], c: 0, e: "Decrement Jump Not Zero." },
+                { p: "Erro quantização ADC:", o: ["Diferença valor real vs digital", "Curto", "Programação", "Fio"], c: 0, e: "Limitado pelos bits." },
+                { p: "Brown-out Reset:", o: ["Queda de tensão", "Calor", "Botão", "Software"], c: 0, e: "Protege contra voltagem baixa." },
+                { p: "Protocolo CAN é para:", o: ["Automotivo/Indústria", "Calculadora", "Web", "Fone"], c: 0, e: "Robusto contra ruído." },
+                { p: "Registrador B usado em:", o: ["MUL e DIV", "Soma", "Reset", "Clock"], c: 0, e: "Parceiro do ACC." },
+                { p: "Memory Mapping:", o: ["Hardwares como endereços de RAM", "Desenho", "Limpeza", "Flash"], c: 0, e: "Acessa pinos como memória." },
+                { p: "Pino RESET:", o: ["Estado inicial", "Apagar tudo", "Mais rápido", "Som"], c: 0, e: "Recomeça o código." },
+                { p: "Interrupção Mascarável:", o: ["Pode desativar", "Invisível", "Fixa", "Fatal"], c: 0, e: "Habilita via código." },
+                { p: "Linker une:", o: ["Arquivos objeto no executável", "C em Assembly", "Código em PDF", "Fios"], c: 0, e: "Finaliza o processo de compilação." }
+            ],
+            calculo: [
+                { p: "Qual a derivada de x²?", o: ["2x", "x", "2", "1/x"], c: 0, e: "Regra da potência: d/dx(x^n) = n*x^(n-1)." },
+                { p: "A integral de cos(x) dx é:", o: ["sen(x) + C", "-sen(x) + C", "cos(x)", "tan(x)"], c: 0, e: "A derivada do seno é o cosseno." },
+                { p: "Derivada de e^x:", o: ["e^x", "xe^x", "ln(x)", "0"], c: 0, e: "Função exponencial é invariante na derivada." },
+                { p: "O limite de 1/x quando x tende ao infinito é:", o: ["0", "1", "Infinito", "Indeterminado"], c: 0, e: "O denominador cresce e a fração some." },
+                { p: "A derivada de uma constante é:", o: ["0", "1", "A constante", "x"], c: 0, e: "Constantes não variam." },
+                { p: "Integral de 1/x dx:", o: ["ln|x| + C", "e^x", "x", "1"], c: 0, e: "Padrão logarítmico." },
+                { p: "Derivada de sen(x):", o: ["cos(x)", "-cos(x)", "tan(x)", "sen(x)"], c: 0, e: "Básico de trigonometria." },
+                { p: "Regra da Cadeia serve para:", o: ["Funções compostas", "Produtos", "Somas", "Divisões"], c: 0, e: "d/dx[f(g(x))]." },
+                { p: "Integral de x^n:", o: ["x^(n+1)/(n+1)", "nx", "x^n", "1"], c: 0, e: "Regra inversa da potência." },
+                { p: "O que é o Teorema Fundamental do Cálculo?", o: ["Relaciona derivada e integral", "Soma números", "Calcula área", "Define zero"], c: 0, e: "Diz que a integral é a operação inversa." },
+                { p: "Derivada de ln(x):", o: ["1/x", "e^x", "1", "ln(x)"], c: 0, e: "Propriedade fundamental." },
+                { p: "Integral de e^x dx:", o: ["e^x + C", "ln x", "x", "e"], c: 0, e: "Permanece igual." },
+                { p: "Derivada de tan(x):", o: ["sec²(x)", "cos(x)", "sen(x)", "1"], c: 0, e: "Fórmula clássica." },
+                { p: "Máximos e Mínimos são achados quando:", o: ["f'(x) = 0", "f(x) = 0", "f''(x) = 0", "x = 0"], c: 0, e: "Ponto crítico onde a inclinação é zero." },
+                { p: "Se f''(x) > 0, a concavidade é:", o: ["Para cima", "Para baixo", "Reta", "Nula"], c: 0, e: "Teste da segunda derivada." },
+                { p: "Integral definida calcula:", o: ["Área sob a curva", "Volume", "Soma", "Velocidade"], c: 0, e: "Entre limites a e b." },
+                { p: "Derivada de constante vezes função c*f(x):", o: ["c * f'(x)", "0", "c", "f'(x)"], c: 0, e: "A constante sai da derivada." },
+                { p: "Derivada do produto (u*v):", o: ["u'v + uv'", "u'v'", "u+v", "u/v"], c: 0, e: "Regra de Leibniz." },
+                { p: "Derivada do quociente (u/v):", o: ["(u'v - uv')/v²", "u'/v'", "u-v", "uv"], c: 0, e: "Fórmula padrão." },
+                { p: "O que é uma assíntota?", o: ["Reta que a curva se aproxima sem tocar", "Um ponto", "Uma curva", "O eixo x"], c: 0, e: "Comportamento no limite." },
+                { p: "Limite de sen(x)/x quando x -> 0:", o: ["1", "0", "Infinito", "Indeterminado"], c: 0, e: "Limite fundamental trigonométrico." },
+                { p: "Integral de sen(x) dx:", o: ["-cos(x) + C", "cos(x)", "sen(x)", "tan(x)"], c: 0, e: "Cuidado com o sinal negativo." },
+                { p: "O que é o diferencial dx?", o: ["Variação infinitesimal de x", "Um número", "Uma função", "O erro"], c: 0, e: "Indica a variável de integração." },
+                { p: "Derivada de cot(x):", o: ["-csc²(x)", "sec²(x)", "1", "0"], c: 0, e: "Trigonométrica." },
+                { p: "Ponto de inflexão ocorre quando:", o: ["Concavidade muda", "f(x)=0", "Máximo", "Mínimo"], c: 0, e: "Mudança de sinal na f''(x)." },
+                { p: "Integral de constante 'k' dx:", o: ["kx + C", "k", "x", "0"], c: 0, e: "Gera uma reta inclinada." },
+                { p: "Regra de L'Hôpital resolve:", o: ["Indeterminações 0/0 ou inf/inf", "Somas", "Produtos", "Raízes"], c: 0, e: "Usa derivadas no limite." },
+                { p: "Derivada de log_a(x):", o: ["1/(x ln a)", "1/x", "a^x", "0"], c: 0, e: "Base genérica." },
+                { p: "Integral de sec²(x) dx:", o: ["tan(x) + C", "sen(x)", "cos(x)", "x"], c: 0, e: "Inversa da derivada da tangente." },
+                { p: "O que é uma primitiva?", o: ["A função antes de ser derivada", "A primeira função", "O zero", "A derivada"], c: 0, e: "Antiderivada." },
+                { p: "Derivada de a^x:", o: ["a^x * ln a", "a^x", "xa^(x-1)", "0"], c: 0, e: "Exponencial de base a." },
+                { p: "Volume de sólido de revolução usa:", o: ["Integral", "Soma", "Multiplicação", "Derivada"], c: 0, e: "Geralmente método dos discos." },
+                { p: "Derivada de sec(x):", o: ["sec(x)tan(x)", "tan(x)", "1", "0"], c: 0, e: "Fórmula de tabela." },
+                { p: "Integral de 1/sqrt(1-x²) dx:", o: ["arcsen(x) + C", "sen(x)", "arccos(x)", "tan(x)"], c: 0, e: "Trigonométrica inversa." },
+                { p: "Integral de 1/(1+x²) dx:", o: ["arctan(x) + C", "tan(x)", "ln x", "e^x"], c: 0, e: "Muito comum em provas." },
+                { p: "A regra da substituição é o inverso da:", o: ["Regra da cadeia", "Regra do produto", "Soma", "Divisão"], c: 0, e: "u-substitution." },
+                { p: "Integração por partes vem da:", o: ["Regra do produto", "Quociente", "Cadeia", "Soma"], c: 0, e: "Integral de udv = uv - integral vdu." },
+                { p: "Limite de e^x quando x -> -infinito:", o: ["0", "Infinito", "1", "-1"], c: 0, e: "Exponencial some no negativo." },
+                { p: "Derivada de arccos(x):", o: ["-1/sqrt(1-x²)", "1/x", "0", "sen(x)"], c: 0, e: "Inversa do cosseno." },
+                { p: "Integral tripla calcula:", o: ["Volume em 3D", "Área", "Linha", "Ponto"], c: 0, e: "Cálculo multivariável." },
+                { p: "Derivada de f(x)=x:", o: ["1", "0", "x²", "x"], c: 0, e: "Inclinação unitária." },
+                { p: "Integral de x dx:", o: ["x²/2 + C", "x", "1", "2x"], c: 0, e: "Básico de potência." },
+                { p: "O que é gradiente?", o: ["Vetor de derivadas parciais", "Uma reta", "Um número", "O erro"], c: 0, e: "Direção de maior crescimento." },
+                { p: "Derivada de csc(x):", o: ["-csc(x)cot(x)", "sec(x)", "1", "0"], c: 0, e: "Tabela." },
+                { p: "Série de Taylor serve para:", o: ["Aproximar funções por polinômios", "Somar", "Dividir", "Integrar"], c: 0, e: "Expansão em torno de um ponto." },
+                { p: "Integral de tan(x) dx:", o: ["-ln|cos x| + C", "sec² x", "sen x", "0"], c: 0, e: "Usa substituição u=cos x." },
+                { p: "O que é divergência?", o: ["Escalar de um campo vetorial", "Um vetor", "Uma reta", "Zero"], c: 0, e: "Cálculo vetorial." },
+                { p: "Derivada de raiz de x:", o: ["1/(2*sqrt(x))", "x", "1", "2"], c: 0, e: "x^(1/2) vira (1/2)x^(-1/2)." },
+                { p: "O que é o Jacobiano?", o: ["Determinante para mudança de variáveis", "Um nome", "Uma integral", "Derivada simples"], c: 0, e: "Usado em integrais múltiplas." },
+                { p: "Cálculo diferencial foca em:", o: ["Taxas de variação", "Somas", "Áreas", "Gráficos fixos"], c: 0, e: "Estudo da mudança." }
+            ],
+            embarcados: [],
+            digital: [],
+            quant: []
+        };
+
+        let curMat = "";
+        let curIdx = 0;
+        let curHit = 0;
+
+        function updateStats() {
+            let total = parseInt(localStorage.getItem('sim_total')) || 0;
+            let hits = parseInt(localStorage.getItem('sim_hits')) || 0;
+            if (total > 0) {
+                let p = ((hits / total) * 100).toFixed(1);
+                document.getElementById('perc-pos').innerText = p + "%";
+                document.getElementById('perc-neg').innerText = (100 - p).toFixed(1) + "%";
+            }
+        }
+
+        function start(m) {
+            if (bancoMaster[m].length === 0) return alert("Matéria em desenvolvimento! Tente Micro ou Cálculo.");
+            curMat = m; curIdx = 0; curHit = 0;
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('quiz-area').style.display = 'block';
+            document.getElementById('label-materia').innerText = m.toUpperCase();
+            render();
+        }
+
+        function render() {
+            const q = bancoMaster[curMat][curIdx];
+            document.getElementById('label-progresso').innerText = `Questão ${curIdx + 1} de ${bancoMaster[curMat].length}`;
+            document.getElementById('progress-bar').style.width = `${(curIdx / bancoMaster[curMat].length) * 100}%`;
+            document.getElementById('pergunta-texto').innerText = q.p;
+            document.getElementById('area-feedback').style.display = 'none';
+
+            const area = document.getElementById('opcoes');
+            area.innerHTML = '';
+            q.o.forEach((t, i) => {
+                const b = document.createElement('button');
+                b.className = 'opcao'; b.innerText = t;
+                b.onclick = () => check(i);
+                area.appendChild(b);
+            });
+        }
+
+        function check(i) {
+            const q = bancoMaster[curMat][curIdx];
+            const btns = document.querySelectorAll('.opcao');
+            btns.forEach(b => b.disabled = true);
+
+            let total = parseInt(localStorage.getItem('sim_total')) || 0;
+            let hits = parseInt(localStorage.getItem('sim_hits')) || 0;
+            localStorage.setItem('sim_total', total + 1);
+
+            if (i === q.c) {
+                btns[i].classList.add('correta');
+                curHit++;
+                localStorage.setItem('sim_hits', hits + 1);
+                document.getElementById('res-titulo').innerText = "✅ Correto!";
+                document.getElementById('res-titulo').style.color = "var(--success)";
+            } else {
+                btns[i].classList.add('errada');
+                btns[q.c].classList.add('correta');
+                document.getElementById('res-titulo').innerText = "❌ Errou!";
+                document.getElementById('res-titulo').style.color = "var(--error)";
+            }
+            document.getElementById('explicacao-corpo').innerHTML = `<strong>Explicação:</strong> ${q.e}`;
+            document.getElementById('area-feedback').style.display = 'block';
+            updateStats();
+        }
+
+        function next() {
+            curIdx++;
+            if (curIdx < bancoMaster[curMat].length) render();
+            else {
+                alert(`Fim! Acertos: ${curHit} de ${bancoMaster[curMat].length}`);
+                location.reload();
+            }
+        }
+
+        updateStats();
+    </script>
+</body>
+
+</html>
