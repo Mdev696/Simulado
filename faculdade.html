@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Universitário Pro - 40 Questões</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --bg: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            max-width: 850px;
+            width: 100%;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background: #ebf2f7;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #d6e0e9;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #555;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .text-success {
+            color: var(--success);
+        }
+
+        .text-error {
+            color: var(--error);
+        }
+
+        .btn-reset {
+            grid-column: span 2;
+            background: none;
+            border: 1px solid #cbd5e1;
+            color: #64748b;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .btn-materia {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-materia:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        #quiz-area {
+            display: none;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #eee;
+            height: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: 0.4s;
+        }
+
+        .header-quiz {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #pergunta-texto {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .opcoes-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .opcao {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .correta {
+            background: #d4edda !important;
+            border-color: var(--success) !important;
+        }
+
+        .errada {
+            background: #f8d7da !important;
+            border-color: var(--error) !important;
+        }
+
+        #area-feedback {
+            margin-top: 25px;
+            padding: 20px;
+            border-left: 5px solid var(--accent);
+            background: #f1f8ff;
+            display: none;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .btn-acao {
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="home">
+            <h1 style="text-align: center; color: var(--primary);">Simulado Universitário</h1>
+            <div class="dashboard">
+                <div><span class="stat-label">Acertos</span><span id="perc-pos"
+                        class="stat-value text-success">0%</span></div>
+                <div><span class="stat-label">Erros</span><span id="perc-neg" class="stat-value text-error">0%</span>
+                </div>
+                <button class="btn-reset" onclick="resetStats()">Zerar Estatísticas</button>
+            </div>
+            <div class="menu-grid">
+                <button class="btn-materia" onclick="start('embarcados')">Sistemas Embarcados</button>
+                <button class="btn-materia" onclick="start('arquitetura')">Arquitetura de Processadores</button>
+                <button class="btn-materia" onclick="start('digital_logica')">Eletrônica Digital (Lógica)</button>
+                <button class="btn-materia" onclick="start('digital_avancado')">Eletrônica Digital (Avançado)</button>
+            </div>
+        </div>
+
+        <div id="quiz-area">
+            <div class="header-quiz">
+                <button onclick="location.reload()"
+                    style="cursor:pointer; border:none; background:none; font-size:1.5rem;">←</button>
+                <span id="label-materia">MATÉRIA</span>
+                <span id="label-progresso">Questão 1</span>
+            </div>
+            <div class="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="pergunta-texto"></div>
+            <div id="opcoes" class="opcoes-grid"></div>
+            <div id="area-feedback">
+                <strong id="res-titulo"></strong>
+                <p id="explicacao-corpo"></p>
+                <button class="btn-acao" onclick="next()">Próxima Questão</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const bancoMaster = {
+            "embarcados": [
+                { q: "Qual das alternativas contém somente características fundamentais do Big Data?", o: ["Alto volume, alta velocidade e alto valor.", "Virtualização, alto volume e custo zero.", "Visualização gráfica, virtualização e alta velocidade.", "Alto volume, baixa latência e memória RAM."], c: 0, e: "O Big Data é definido pelos 5 Vs: Volume, Velocidade, Variedade, Veracidade e Valor." },
+                { q: "O mecanismo de Anticetera é considerado um dos primeiros sistemas embarcados. Qual sua função?", o: ["Cálculos balísticos.", "Prever eclipses e posições astronômicas.", "Controle de motores a vapor.", "Navegação GPS antiga."], c: 1, e: "Era um computador analógico grego usado para rastrear ciclos do sistema solar." },
+                { q: "O Apollo Guidance Computer (AGC) foi pioneiro em qual tecnologia?", o: ["Transistores de germânio.", "Circuitos integrados (chips).", "Válvulas termiônicas.", "Inteligência Artificial."], c: 1, e: "O AGC foi um dos primeiros computadores a usar circuitos integrados para reduzir peso e tamanho." },
+                { q: "O que define um sistema de Tempo Real 'Hard' (Crítico)?", o: ["O sistema é muito rápido.", "O descumprimento de um prazo (deadline) é uma falha total/catastrófica.", "O sistema usa Linux.", "A resposta depende da internet."], c: 1, e: "Em sistemas Hard Real-Time, o tempo de resposta é parte da correção lógica do sistema." },
+                { q: "O freio ABS é classificado como qual tipo de sistema embarcado?", o: ["Computação Geral.", "Processamento de Sinais.", "Sistema de Controle.", "Sistema de Rede."], c: 2, e: "Ele monitora sensores e atua na pressão do freio em malha fechada para controle dinâmico." },
+                { q: "Qual a função do ADC em um sistema embarcado?", o: ["Aumentar a velocidade do processador.", "Converter sinais analógicos para digitais.", "Armazenar dados permanentemente.", "Gerar sinais PWM."], c: 1, e: "ADC (Analog-to-Digital Converter) permite que o microcontrolador leia tensões do mundo real." },
+                { q: "O que caracteriza um Sistema Embarcado de Propósito Específico?", o: ["Pode rodar qualquer software (ex: PC).", "Executa uma tarefa dedicada com recursos otimizados.", "Não possui processador.", "Funciona apenas com bateria."], c: 1, e: "Diferente de um PC, um embarcado é projetado para fazer uma coisa específica muito bem feita." },
+                { q: "Sistemas 'Soft' Real-Time diferem dos 'Hard' pois:", o: ["São mais rápidos.", "Um atraso degrada a qualidade mas não é fatal.", "Não possuem relógio interno.", "São feitos apenas em software."], c: 1, e: "Exemplo: Streaming de vídeo. Se travar, é ruim, mas ninguém morre ou o sistema não explode." },
+                { q: "A Internet das Coisas (IoT) depende dos embarcados para:", o: ["Apenas estética.", "Coleta de dados e conectividade na borda (edge).", "Substituir a internet das pessoas.", "Eliminar a necessidade de nuvem."], c: 1, e: "Sistemas embarcados são os 'sentidos' da IoT, capturando dados via sensores." },
+                { q: "Qual o papel de um atuador em um sistema embarcado?", o: ["Ler a temperatura.", "Transformar sinais elétricos em ação física (ex: motor).", "Processar dados matemáticos.", "Proteger contra curto-circuito."], c: 1, e: "Sensores leem o mundo, atuadores modificam o mundo." }
+            ],
+            "arquitetura": [
+                { q: "Qual a principal característica da arquitetura RISC?", o: ["Instruções complexas que levam vários ciclos.", "Conjunto de instruções reduzido e pipeline eficiente.", "Uso de muita memória cache externa.", "Não possui registradores."], c: 1, e: "RISC foca em instruções simples que executam em um único ciclo de clock na maioria das vezes." },
+                { q: "Qual a vantagem da arquitetura CISC?", o: ["Menor consumo de energia.", "Código assembly mais curto por possuir instruções complexas.", "Maior velocidade de clock.", "Simplicidade de hardware."], c: 1, e: "Uma instrução CISC pode fazer o que várias instruções RISC fariam, economizando espaço de memória de código." },
+                { q: "O que é um 'Watchdog Timer' em microcontroladores?", o: ["Um relógio para o usuário ver as horas.", "Um hardware que reinicia o sistema se o software travar.", "Um sensor de presença.", "Um otimizador de bateria."], c: 1, e: "O 'Cão de guarda' reseta o processador se ele não for 'alimentado' pelo software no tempo correto." },
+                { q: "Memória EEPROM é ideal para:", o: ["Executar o código principal (RAM).", "Armazenar configurações que não podem ser perdidas ao desligar.", "Fazer cálculos matemáticos.", "Acelerar o acesso ao disco rígido."], c: 1, e: "EEPROM é não-volátil e pode ser escrita e apagada eletricamente pelo próprio firmware." },
+                { q: "O que é o Pipeline em um processador?", o: ["Um cano de refrigeração líquida.", "Técnica para executar várias etapas de instruções diferentes simultaneamente.", "A conexão entre o processador e o monitor.", "O barramento de endereços."], c: 1, e: "O pipeline permite que, enquanto uma instrução é executada, a próxima já esteja sendo decodificada." },
+                { q: "Diferença entre Microcontrolador e Microprocessador:", o: ["Não há diferença.", "O microcontrolador integra CPU, memória e periféricos no mesmo chip.", "O microprocessador é sempre mais lento.", "Microcontroladores não usam energia elétrica."], c: 1, e: "Microcontroladores são 'computadores em um único chip', ideais para sistemas embarcados." },
+                { q: "O barramento de endereços determina:", o: ["A velocidade de processamento.", "A quantidade máxima de memória acessível.", "O volume de dados transferidos por vez.", "A voltagem do sistema."], c: 1, e: "Se o barramento tem 32 bits, ele pode endereçar 2^32 posições de memória." },
+                { q: "Arquitetura de Harvard se destaca por:", o: ["Ser feita em Boston.", "Possuir barramentos separados para dados e instruções.", "Usar apenas memória RAM.", "Não ter unidade lógica e aritmética."], c: 1, e: "Isso evita o 'gargalo de Von Neumann', permitindo ler uma instrução e um dado ao mesmo tempo." },
+                { q: "O que ocorre em um 'Stack Overflow'?", o: ["A bateria acaba.", "A pilha de chamadas de funções excede o limite da memória.", "O processador queima por calor.", "O Wi-Fi desconecta."], c: 1, e: "Acontece quando há recursão infinita ou excesso de variáveis locais na memória Stack." },
+                { q: "Instruções de I/O mapeado em memória servem para:", o: ["Aumentar a RAM.", "Tratar periféricos como se fossem endereços de memória comum.", "Proteger o sistema contra vírus.", "Formatar o cartão SD."], c: 1, e: "Facilita a programação, pois usa as mesmas instruções de leitura/escrita para acessar um LED ou sensor." }
+            ],
+            "digital_logica": [
+                { q: "Flip-Flop tipo D: Se D=1 e ocorre a borda de subida do clock, qual a saída Q?", o: ["0", "1", "Mantém o estado anterior", "Inverte o estado anterior"], c: 1, e: "O FF tipo D (Data) apenas repassa o valor da entrada para a saída no momento do clock." },
+                { q: "Uma Máquina de Moore define sua saída baseada em:", o: ["Entradas atuais apenas.", "Estado atual apenas.", "Entradas e estado atual.", "Apenas o clock."], c: 1, e: "Diferente da Mealy, a Moore é mais estável pois a saída só muda quando o estado muda." },
+                { q: "Codificação One-Hot para 4 estados usa quantos Flip-Flops?", o: ["2", "4", "8", "16"], c: 1, e: "One-Hot = 1 bit (FF) para cada estado." },
+                { q: "Simplificação de Karnaugh: O que um grupo de 8 '1s' adjacentes elimina?", o: ["1 variável.", "2 variáveis.", "3 variáveis.", "Nenhuma variável."], c: 2, e: "Cada dobra de tamanho do grupo (2, 4, 8) elimina uma variável adicional (2^3 = 8)." },
+                { q: "O que é um Glitch em lógica combinacional?", o: ["Um erro permanente no chip.", "Um pulso transiente indesejado devido a atrasos de propagação.", "Uma técnica de overclock.", "Um tipo de memória RAM."], c: 1, e: "Glitches ocorrem quando caminhos diferentes levam tempos diferentes para atualizar a saída." },
+                { q: "Um mapa de Karnaugh 4x4 representa quantas variáveis?", o: ["2", "4", "8", "16"], c: 1, e: "São 16 células (2^4), cobrindo todas as combinações de 4 variáveis." },
+                { q: "Porta lógica XOR (OU Exclusivo) resulta em '1' quando:", o: ["Ambas entradas são 1.", "Ambas entradas são 0.", "As entradas são diferentes entre si.", "Qualquer entrada é 1."], c: 2, e: "XOR detecta diferença. Se for 01 ou 10, a saída é 1." },
+                { q: "Qual a função de um Multiplexador (MUX)?", o: ["Somar dois números binários.", "Selecionar uma entre várias entradas para uma única saída.", "Armazenar um bit de dados.", "Inverter o sinal de clock."], c: 1, e: "Funciona como uma chave seletora digital controlada por bits de seleção." },
+                { q: "Atraso de Propagação (Propagation Delay) é:", o: ["O tempo que o sinal leva para viajar no cabo.", "O tempo entre a mudança na entrada e a mudança na saída de uma porta.", "A velocidade do Wi-Fi.", "O tempo de boot do sistema."], c: 1, e: "Portas lógicas não são instantâneas; os transistores levam nanosegundos para comutar." },
+                { q: "Lógica CMOS é caracterizada por:", o: ["Alto consumo de energia.", "Baixo consumo estático e uso de transistores PMOS/NMOS.", "Ser apenas analógica.", "Funcionar apenas em altas temperaturas."], c: 1, e: "CMOS é a base dos chips modernos justamente por quase não gastar energia quando não está alternando estados." }
+            ],
+            "digital_avancado": [
+                { q: "No mapa de Karnaugh, o termo para os 4 cantos da tabela é:", o: ["A.B.C.D", "B'.D'", "A+B+C+D", "Inexistente"], c: 1, e: "Os quatro cantos são adjacentes em um mapa de 4 variáveis, simplificando para as variáveis que não mudam (B' e D')." },
+                { q: "Máquina de Mealy: A saída muda se a entrada mudar?", o: ["Não, só no clock.", "Sim, imediatamente (assíncrono em relação ao estado).", "Depende da bateria.", "Só se for One-Hot."], c: 1, e: "Na Mealy, a saída é uma função direta da entrada, podendo causar mudanças dentro do mesmo ciclo de clock." },
+                { q: "Qual a vantagem da codificação Binária sobre a One-Hot?", o: ["Usa menos flip-flops.", "É mais rápida.", "Não tem glitches.", "É mais fácil de depurar."], c: 0, e: "Binário usa Log2(N) flip-flops, enquanto One-Hot usa N. Para 32 estados, binário usa 5 FFs e One-Hot 32." },
+                { q: "Um decodificador 3 para 8 possui quantas entradas de seleção?", o: ["3", "8", "1", "24"], c: 0, e: "O nome já diz: 3 entradas geram 8 saídas possíveis (2^3)." },
+                { q: "O que é 'Setup Time' em um Flip-Flop?", o: ["Tempo de ligar o chip.", "Tempo mínimo que o dado deve estar estável ANTES da borda do clock.", "Tempo que o dado fica na saída.", "Intervalo entre dois clocks."], c: 1, e: "Se o dado mudar muito perto do clock (violando o Setup), a saída pode ficar instável (metaestabilidade)." },
+                { q: "A condição de 'Don't Care' (X) no mapa de Karnaugh serve para:", o: ["Indicar erro no circuito.", "Simplificar a expressão tratando o X como 0 ou 1 conforme conveniência.", "Economizar energia.", "Anular a saída."], c: 1, e: "Usamos o X para formar grupos maiores e obter equações menores." },
+                { q: "Um somador completo (Full Adder) difere do meio somador por:", o: ["Ser mais rápido.", "Possuir entrada de 'Carry-in' (vem do bit anterior).", "Usar apenas portas AND.", "Não ter saída de soma."], c: 1, e: "O Full Adder permite encadear somadores para processar números de vários bits." },
+                { q: "Circuitos Sequenciais dependem de:", o: ["Apenas entradas atuais.", "Entradas atuais e histórico (memória/estado).", "Apenas resistores.", "Sinais analógicos."], c: 1, e: "A presença de elementos de memória (Flip-Flops) define o circuito sequencial." },
+                { q: "O que é Metaestabilidade?", o: ["Um estado lógico perfeito.", "Estado onde a saída fica oscilando entre 0 e 1 por tempo indeterminado.", "Quando o chip derrete.", "Falta de clock."], c: 1, e: "Ocorre geralmente por violação de Setup ou Hold Time em sinais assíncronos." },
+                { q: "Simplifique: A.B + A.B'", o: ["A", "B", "1", "0"], c: 0, e: "Pelo teorema da adjacência: A(B + B') = A(1) = A." }
+            ]
+        };
+
+        let curMat = "";
+        let curIdx = 0;
+        let curHit = 0;
+
+        function updateStats() {
+            let total = parseInt(localStorage.getItem('sim_total')) || 0;
+            let hits = parseInt(localStorage.getItem('sim_hits')) || 0;
+            if (total > 0) {
+                let p = ((hits / total) * 100).toFixed(1);
+                document.getElementById('perc-pos').innerText = p + "%";
+                document.getElementById('perc-neg').innerText = (100 - p).toFixed(1) + "%";
+            }
+        }
+
+        function resetStats() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        function start(m) {
+            curMat = m; curIdx = 0; curHit = 0;
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('quiz-area').style.display = 'block';
+            document.getElementById('label-materia').innerText = m.replace('_', ' ').toUpperCase();
+            render();
+        }
+
+        function render() {
+            const q = bancoMaster[curMat][curIdx];
+            document.getElementById('label-progresso').innerText = `Questão ${curIdx + 1} de ${bancoMaster[curMat].length}`;
+            document.getElementById('progress-bar').style.width = `${(curIdx / bancoMaster[curMat].length) * 100}%`;
+            document.getElementById('pergunta-texto').innerText = q.q;
+            document.getElementById('area-feedback').style.display = 'none';
+
+            const area = document.getElementById('opcoes');
+            area.innerHTML = '';
+            q.o.forEach((t, i) => {
+                const b = document.createElement('button');
+                b.className = 'opcao'; b.innerText = t;
+                b.onclick = () => check(i);
+                area.appendChild(b);
+            });
+        }
+
+        function check(i) {
+            const q = bancoMaster[curMat][curIdx];
+            const btns = document.querySelectorAll('.opcao');
+            btns.forEach(b => b.disabled = true);
+
+            let total = parseInt(localStorage.getItem('sim_total')) || 0;
+            let hits = parseInt(localStorage.getItem('sim_hits')) || 0;
+            localStorage.setItem('sim_total', total + 1);
+
+            if (i === q.c) {
+                btns[i].classList.add('correta');
+                curHit++;
+                localStorage.setItem('sim_hits', hits + 1);
+                document.getElementById('res-titulo').innerText = "✅ Correto!";
+                document.getElementById('res-titulo').style.color = "var(--success)";
+            } else {
+                btns[i].classList.add('errada');
+                btns[q.c].classList.add('correta');
+                document.getElementById('res-titulo').innerText = "❌ Errou!";
+                document.getElementById('res-titulo').style.color = "var(--error)";
+            }
+            document.getElementById('explicacao-corpo').innerHTML = `<strong>Explicação:</strong> ${q.e}`;
+            document.getElementById('area-feedback').style.display = 'block';
+            updateStats();
+        }
+
+        function next() {
+            curIdx++;
+            if (curIdx < bancoMaster[curMat].length) render();
+            else {
+                alert(`Sessão finalizada! Acertos: ${curHit} de ${bancoMaster[curMat].length}`);
+                location.reload();
+            }
+        }
+
+        updateStats();
+    </script>
+</body>
+
+</html>
